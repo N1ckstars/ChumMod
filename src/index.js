@@ -8,7 +8,7 @@
 // 6. should work i hope
 
 require('dotenv').config();
-const { Client, IntentsBitField, PermissionsBitField, ActivityType } = require('discord.js');
+const { Client, IntentsBitField, PermissionsBitField, ActivityType, GuildBan } = require('discord.js');
 
 const client = new Client({
     intents: [
@@ -23,24 +23,22 @@ client.on('ready', (c) => {
     console.log(`✅ ${c.user.tag} is online.`)
 
     client.user.setActivity({
-        name: 'n1ckstars cry in pain while trying to fix me',
+        name: 'TESTING',
         type: ActivityType.Watching
     })
 })
-
-// Main code
 
 client.on('interactionCreate', (interaction) => {
     if (!interaction.isChatInputCommand()) return;
 
     if (interaction.commandName === 'mute') {
-        const memberinitcommand = interaction.member
+        const moderator = interaction.member
         const user = interaction.options.get('user').value;
         const mutedRole = process.env.MUTE_ROLE_ID;
         const role = interaction.guild.roles.cache.get(mutedRole);
-        console.log(memberinitcommand)
+        console.log(moderator)
 
-        if (memberinitcommand.permissions.has(PermissionsBitField.Flags.MuteMembers, true)) {
+        if (moderator.permissions.has(PermissionsBitField.Flags.MuteMembers, true)) {
             interaction.guild.members.fetch(user)
             .then(member => {
                 member.roles.add(role);
@@ -64,6 +62,18 @@ client.on('interactionCreate', (interaction) => {
             return message.channel.send('There is no Muted role on this server');
         }
     }
+
+    if (interaction.commandName === 'ban') {
+        const target = interaction.options.get('user').user.id
+        const moderator = interaction.member
+
+        if (!moderator.permissions.has(PermissionsBitField.Flags.BanMembers, true)) {
+            return interaction.reply({content: 'you do not have the sufficient permissions to run this command', ephemeral: true})
+        }
+        else {
+            interaction.guild.members.ban(target)
+        }
+    }
 })
 
-client.login(process.env.TOKEN)
+client.login(process.env.TOKEN);

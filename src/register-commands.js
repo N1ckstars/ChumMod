@@ -21,6 +21,19 @@ const commands = [
                 required: true
             }
         ]
+    },
+
+    {
+        name: 'ban',
+        description: 'delete a user permanently LOL',
+        options: [
+            {
+                name: 'user',
+                description: 'Select user to delete',
+                type: ApplicationCommandOptionType.User,
+                required: true
+            }
+        ]
     }
 ]
 const rest = new REST({ version: '10'}).setToken(process.env.TOKEN);
