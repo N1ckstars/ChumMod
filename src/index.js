@@ -28,6 +28,8 @@ client.on('ready', (c) => {
     })
 })
 
+// Main code
+
 client.on('interactionCreate', (interaction) => {
     if (!interaction.isChatInputCommand()) return;
 
